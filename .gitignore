@@ -12,3 +12,7 @@ run/
 /.gradle
 /buildSrc/.gradle
 /buildSrc/.kotlin
+
+/gradle/wrapper/
+/gradlew
+/gradlew.bat
