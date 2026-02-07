@@ -3,6 +3,7 @@ package org.bukkit.craftbukkit.entity;
 import net.minecraft.server.EntityHuman;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -45,12 +46,41 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         return inventory;
     }
 
+    public InventoryView getOpenInventory() {
+        return getHandle().activeContainer.getBukkitView();
+    }
+
+    public InventoryView openInventory(Inventory inventory) {
+        return null; // TODO
+    }
+
+    public InventoryView openWorkbench(Location location, boolean force) {
+        return null; // TODO
+    }
+
+    public void openInventory(InventoryView inventory) {
+        // TODO
+    }
+
+    public void closeInventory() {
+        ((EntityPlayer) getHandle()).y();
+    }
+
     public ItemStack getItemInHand() {
         return getInventory().getItemInHand();
     }
 
     public void setItemInHand(ItemStack item) {
         getInventory().setItemInHand(item);
+    }
+
+    public ItemStack getItemOnCursor() {
+        return new CraftItemStack(getHandle().inventory.j());
+    }
+
+    public void setItemOnCursor(ItemStack item) {
+        getHandle().inventory.b(new net.minecraft.server.ItemStack(item.getTypeId(), item.getAmount(), item.getDurability()));
+        ((EntityPlayer) getHandle()).z();
     }
 
     @Override

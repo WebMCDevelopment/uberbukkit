@@ -10,6 +10,8 @@ public class WorldData {
     private int b;
     private int c;
     private int d;
+    private float yaw; // Poseidon
+    private float pitch; // Poseidon
     private long e;
     private long f;
     private long g;
@@ -27,6 +29,8 @@ public class WorldData {
         this.b = nbttagcompound.e("SpawnX");
         this.c = nbttagcompound.e("SpawnY");
         this.d = nbttagcompound.e("SpawnZ");
+        this.yaw = nbttagcompound.g("SpawnYaw"); // Poseidon
+        this.pitch = nbttagcompound.g("SpawnPitch"); // Poseidon
         this.e = nbttagcompound.getLong("Time");
         this.f = nbttagcompound.getLong("LastPlayed");
         this.g = nbttagcompound.getLong("SizeOnDisk");
@@ -52,6 +56,8 @@ public class WorldData {
         this.b = worlddata.b;
         this.c = worlddata.c;
         this.d = worlddata.d;
+        this.yaw = worlddata.yaw; // Poseidon
+        this.pitch = worlddata.pitch; // Poseidon
         this.e = worlddata.e;
         this.f = worlddata.f;
         this.g = worlddata.g;
@@ -95,6 +101,8 @@ public class WorldData {
         nbttagcompound.a("SpawnX", this.b);
         nbttagcompound.a("SpawnY", this.c);
         nbttagcompound.a("SpawnZ", this.d);
+        nbttagcompound.a("SpawnYaw", this.yaw); // Poseidon
+        nbttagcompound.a("SpawnPitch", this.pitch); // Poseidon
         nbttagcompound.setLong("Time", this.e);
         nbttagcompound.setLong("SizeOnDisk", this.g);
         nbttagcompound.setLong("LastPlayed", System.currentTimeMillis());
@@ -125,6 +133,17 @@ public class WorldData {
         return this.d;
     }
 
+    // Poseidon start
+    public float getYaw() {
+        return this.yaw;
+    }
+
+    public float getPitch() {
+        return this.pitch;
+    }
+
+    // Poseidon end
+
     public long f() {
         return this.e;
     }
@@ -150,6 +169,17 @@ public class WorldData {
         this.c = j;
         this.d = k;
     }
+
+    // Poseidon start
+    public void setSpawn(int i, int j, int k, float yaw, float pitch) {
+        this.b = i;
+        this.c = j;
+        this.d = k;
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+
+    // Poseidon end
 
     public void a(String s) {
         this.name = s;

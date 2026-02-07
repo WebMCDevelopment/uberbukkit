@@ -5,6 +5,11 @@ public class InventoryCrafting implements IInventory {
     private ItemStack[] items;
     private int b;
     private Container c;
+    // Poseidon start
+    public IInventory resultInventory;
+    public CraftingRecipe currentRecipe;
+    private List<HumanEntity> viewers = new ArrayList<HumanEntity>();
+    // Poseidon end
 
     // CraftBukkit start
     public ItemStack[] getContents() {

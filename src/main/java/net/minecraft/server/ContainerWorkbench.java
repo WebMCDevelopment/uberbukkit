@@ -58,6 +58,7 @@ public class ContainerWorkbench extends Container {
 
     public void a(IInventory iinventory) {
         // CraftBukkit start
+        CraftingManager.getInstance().lastCraftView = getBukkitView(); // Poseidon
         ItemStack craftResult = CraftingManager.getInstance().craft(this.craftInventory);
         this.resultInventory.setItem(0, craftResult);
         if (super.listeners.size() < 1) {

@@ -7,9 +7,7 @@ java.targetCompatibility = JavaVersion.toVersion(javaVersion)
 repositories {
     mavenCentral()
     mavenLocal()
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    maven("https://repo.maven.apache.org/maven2/")
 }
 
 plugins {

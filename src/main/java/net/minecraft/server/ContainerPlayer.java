@@ -57,11 +57,12 @@ public class ContainerPlayer extends Container {
             this.a(new Slot(inventoryplayer, i, 8 + i * 18, 142));
         }
 
-        this.a((IInventory) this.craftInventory);
+        //this.a((IInventory) this.craftInventory); // Poseidon
     }
 
     public void a(IInventory iinventory) {
         // CraftBukkit start
+        CraftingManager.getInstance().lastCraftView = getBukkitView(); // Poseidon
         ItemStack craftResult = CraftingManager.getInstance().craft(this.craftInventory);
         this.resultInventory.setItem(0, craftResult);
         if (super.listeners.size() < 1) {

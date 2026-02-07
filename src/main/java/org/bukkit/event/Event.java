@@ -503,6 +503,12 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.inventory.FurnaceBurnEvent
          */
         FURNACE_BURN(Category.INVENTORY),
+        /**
+         * Called when the items in a crafting grid match a recipe
+         *
+         * @see org.bukkit.event.inventory.PrepareItemCraftEvent
+         */
+        PREPARE_ITEM_CRAFT(Category.INVENTORY),
 
         /**
          * SERVER EVENTS
@@ -854,7 +860,7 @@ public abstract class Event implements Serializable {
          */
         DENY,
         /**
-         * Neither deny nor allow the event.
+         * Neither deny nor alloweven the event.
          * The server will proceed with its normal handling.
          */
         DEFAULT,

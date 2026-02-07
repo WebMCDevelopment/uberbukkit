@@ -29,10 +29,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.packet.*;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.CraftingInventory;
 
 import uk.betacraft.uberbukkit.UberbukkitConfig;
+import org.bukkit.inventory.Recipe;
 import uk.betacraft.uberbukkit.packet.Packet62Sound;
 import uk.betacraft.uberbukkit.packet.Packet63Digging;
 import uk.betacraft.uberbukkit.protocol.Protocol;
@@ -1447,9 +1450,53 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 return;
             }
 
-            ItemStack itemstack = this.player.activeContainer.a(packet102windowclick.b, packet102windowclick.c, packet102windowclick.f, this.player);
 
-            if (ItemStack.equals(packet102windowclick.e, itemstack)) {
+            // Poseidon start
+            InventoryView inventory = this.player.activeContainer.getBukkitView();
+            SlotType type = CraftInventoryView.getSlotType(inventory, packet102windowclick.b);
+
+            InventoryClickEvent clickEvent;
+            if (inventory instanceof CraftingInventory && type == SlotType.RESULT) {
+                Recipe recipe = ((CraftingInventory) inventory.getTopInventory()).getRecipe();
+                clickEvent = new CraftItemEvent(recipe, inventory, type, packet102windowclick.b, packet102windowclick.c != 0, packet102windowclick.f);
+            } else {
+                clickEvent = new InventoryClickEvent(inventory, type, packet102windowclick.b, packet102windowclick.c != 0, packet102windowclick.f);
+            }
+            server.getPluginManager().callEvent(clickEvent);
+
+            ItemStack itemstack = null;
+            boolean defaultBehavior = false;
+
+            switch (clickEvent.getResult()) {
+                case DEFAULT:
+                    itemstack = this.player.activeContainer.a(packet102windowclick.b, packet102windowclick.c, packet102windowclick.f, this.player);
+                    defaultBehavior = true;
+                    break;
+                case DENY:
+                    break;
+                case ALLOW:
+                    org.bukkit.inventory.ItemStack cursor = clickEvent.getView().getCursor();
+                    if (cursor == null) {
+                        this.player.inventory.b((ItemStack) null);
+                    } else {
+                        this.player.inventory.b(new ItemStack(cursor.getTypeId(), cursor.getAmount(), cursor.getDurability()));
+                    }
+                    org.bukkit.inventory.ItemStack item = clickEvent.getCurrentItem();
+                    if (item != null) {
+                        itemstack = new ItemStack(item.getTypeId(), item.getAmount(), item.getDurability());
+                        if(packet102windowclick.b == -999) {
+                            this.player.b(itemstack);
+                        } else {
+                            this.player.activeContainer.b(packet102windowclick.b).c(itemstack);
+                        }
+                    } else if (packet102windowclick.b != -999) {
+                        this.player.activeContainer.b(packet102windowclick.b).c((ItemStack) null);
+                    }
+                    break;
+            }
+            // Poseidon end
+
+            if (defaultBehavior && ItemStack.equals(packet102windowclick.e, itemstack)) {
                 this.player.netServerHandler.sendPacket(new Packet106Transaction(packet102windowclick.a, packet102windowclick.d, true));
                 this.player.h = true;
                 this.player.activeContainer.a();
@@ -1466,6 +1513,11 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 }
 
                 this.player.a(this.player.activeContainer, arraylist);
+
+                // Poseidon start
+                if(type == SlotType.RESULT && itemstack != null)
+                    this.player.netServerHandler.sendPacket(new Packet103SetSlot(this.player.activeContainer.windowId, 0, itemstack));
+                // Poseidon end
             }
         }
     }

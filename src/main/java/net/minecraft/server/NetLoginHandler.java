@@ -89,7 +89,12 @@ public class NetLoginHandler extends NetHandler {
         receivedKeepAlive = true;
     }
 
+    public boolean isCracked() {
+        return this.g != null && this.g.startsWith(".");
+    }
+
     public void a(Packet1Login packet1login) {
+
         if (receivedLoginPacket) {
             this.disconnect("Multiple login packets received.");
             return;
@@ -152,10 +157,10 @@ public class NetLoginHandler extends NetHandler {
             }
             //Project Poseidon - End (Release2Beta
 
-            if (((CraftServer) Bukkit.getServer()).isShuttingdown()) {
-                this.disconnect(this.msgKickShutdown);
-                return;
-            }
+        if (((CraftServer) Bukkit.getServer()).isShuttingdown()) {
+            this.disconnect(this.msgKickShutdown);
+            return;
+        }
 
 
             new LoginProcessHandler(this, packet1login, this.server.server, this.server.onlineMode);
